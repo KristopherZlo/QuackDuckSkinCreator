@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>QuackDuck Skin Creator</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>QuackDuck Skin Creator</h1>
+    <div class="container animations-container">
+      <div class="section" style="width: 100%;">
+        <h2>Animations</h2>
+        <div class="animation-controls">
+          <button class="add-animation-button" onclick="openAnimationSelectModal()">+</button>
+          <div class="animation-zoom-speed">
+            <label for="animationZoomLevel">Scale:</label>
+            <input type="range" id="animationZoomLevel" min="1" max="5" value="2" />
+            <span id="animationZoomValue">2x</span>
+            <label for="animationSpeedLevel">Speed:</label>
+            <input type="range" id="animationSpeedLevel" min="1" max="60" value="10" />
+            <span id="animationSpeedValue">10 fps</span>
+          </div>
+        </div>
+        <div id="animationList"></div>
+      </div>
+    </div>
+    <div class="container editor-preview-container">
+      <div class="section editor-section">
+        <h2>Sprite editor</h2>
+        <div id="zoomControls">
+          <label for="zoomLevel">Scale:</label>
+          <input type="range" id="zoomLevel" min="1" max="10" value="4" />
+          <span id="zoomValue">4x</span>
+          <label for="gridToggle" id="gridToggleLabel">
+            <input type="checkbox" id="gridToggle" checked /> Show grid </label>
+          <button class="button align-button" onclick="alignAllToGrid()">Align to grid</button>
+          <button class="button crop-button" onclick="cropSprites()">Trim height</button>
+        </div>
+        <div id="editorCanvasContainer">
+          <canvas id="editorCanvas"></canvas>
+        </div>
+        <div class="frame-size-controls">
+          <label for="frameWidth">Frame width:</label>
+          <input type="number" id="frameWidth" value="32" min="1" />
+          <label for="frameHeight">Frame height:</label>
+          <input type="number" id="frameHeight" value="32" min="1" />
+        </div>
+      </div>
+      <div class="section preview-section">
+        <h2>Preview spritelist</h2>
+        <div id="previewZoomControls">
+          <label for="previewZoomLevel">Scale:</label>
+          <input type="range" id="previewZoomLevel" min="1" max="10" value="2" />
+          <span id="previewZoomValue">2x</span>
+        </div>
+        <div id="previewCanvasContainer">
+          <canvas id="previewCanvas"></canvas>
+        </div>
+        <div class="preview-buttons">
+          <button class="button" onclick="generateSpritesheet()">Generate spritelist</button>
+          <button class="button" onclick="downloadSkin()">Download skin</button>
+        </div>
+      </div>
+    </div>
+    <div class="container assets-container">
+      <div class="section assets-section">
+        <h2>Loading images</h2>
+        <div id="imageDropZone" class="drop-zone"> Drag and drop images here or click to select </div>
+        <input type="file" id="imageLoader" accept=".png" multiple />
+        <div id="fileList"></div>
+      </div>
+      <div class="section assets-section">
+        <h2>Loading sounds</h2>
+        <div id="soundDropZone" class="drop-zone"> Drag sounds here or click to select </div>
+        <input type="file" id="soundLoader" accept=".mp3" multiple />
+        <div id="soundList"></div>
+      </div>
+    </div>
+    <div id="animationSelectModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeAnimationSelectModal()">&times;</span>
+        <h3>Select animation</h3>
+        <div id="animationOptions"></div>
+      </div>
+    </div>
+    <div id="messageModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeMessageModal()">&times;</span>
+        <h3 id="messageModalTitle"></h3>
+        <p id="messageModalContent"></p>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
