@@ -492,13 +492,14 @@ function alignAllToGrid() {
     const frameWidth = parseInt(document.getElementById('frameWidth').value);
     const frameHeight = parseInt(document.getElementById('frameHeight').value);
 
-    let yPosition = 0;
-
     images.forEach(img => {
-        img.x = 0;
-        // Align to the nearest bottom grid line
-        img.y = Math.ceil((yPosition + img.height) / frameHeight) * frameHeight - img.height;
-        yPosition += Math.ceil(img.height / frameHeight) * frameHeight;
+        // Align X to the nearest grid line
+        img.x = Math.round(img.x / frameWidth) * frameWidth;
+
+        // Align Y to the nearest grid line, considering bottom alignment
+        const bottomY = img.y + img.height;
+        const nearestGridY = Math.round(bottomY / frameHeight) * frameHeight;
+        img.y = nearestGridY - img.height;
     });
 
     drawEditor();
@@ -874,21 +875,27 @@ function generateSpritesheet() {
 
         let img = null;
         for (let image of images) {
+            // Check for any overlap between the frame and the image
             if (
-                x >= image.x && x < image.x + image.width &&
-                y >= image.y && y < image.y + image.height
+                x < image.x + image.width && x + frameWidth > image.x &&
+                y < image.y + image.height && y + frameHeight > image.y
             ) {
                 img = image;
                 break;
             }
         }
         if (img) {
+            // Calculate the source coordinates within the image
+            const sx = x - img.x;
+            const sy = y - img.y;
             frames.push({
                 img: img,
-                sx: x - img.x,
-                sy: y - img.y,
+                sx: sx,
+                sy: sy,
                 frameKey: frameKey
             });
+        } else {
+            console.error(`No image found for frameKey ${frameKey}`);
         }
     });
 
@@ -897,6 +904,7 @@ function generateSpritesheet() {
         return;
     }
 
+    // The rest of the function remains the same
     const columns = 1;
     const rows = frames.length;
 
@@ -923,7 +931,7 @@ function generateSpritesheet() {
             frameHeight
         );
 
-        const newFrameKey = `${index}:0`; 
+        const newFrameKey = `${index}:0`;
         frameMap[frame.frameKey] = newFrameKey;
     });
 
@@ -943,7 +951,7 @@ function generateSpritesheet() {
     spritesheetCanvas.toBlob(function(blob) {
         spritesheetBlob = blob;
         showMessageModal('Success', 'Spritesheet generated successfully!');
-        updateAnimationList(); 
+        updateAnimationList();
     });
 }
 
